@@ -7,14 +7,33 @@ import java.io.StringWriter;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
+//import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+
+import net.sf.saxon.TransformerFactoryImpl;
+import net.sf.saxon.s9api.ExtensionFunction;
+import net.sf.saxon.s9api.Processor;
+import sigUtils.ConvertExpressionsToXML;
 
 public  class Transform {
 	public  static String execute(String inputXmlString,File xsltFile)   {
 		
-        TransformerFactory factory = new net.sf.saxon.TransformerFactoryImpl();
+		TransformerFactoryImpl factory = new net.sf.saxon.TransformerFactoryImpl();
+        
+        // Get the currently used processor
+        net.sf.saxon.Configuration saxonConfig = factory.getConfiguration();
+        Processor processor = (Processor) saxonConfig.getProcessor();     
+        // Here extension happens, test comes from class ConvertExpressionsToXML
+        ExtensionFunction convertExpressionsToXML = new ConvertExpressionsToXML();
+        processor.registerExtensionFunction(convertExpressionsToXML);       
+        
+        
+        
+        
+        
+        
+        
         StreamSource xslt = new StreamSource(xsltFile);
 
         StreamSource text = new StreamSource(new StringReader(inputXmlString));
