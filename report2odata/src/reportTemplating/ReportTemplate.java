@@ -71,8 +71,12 @@ public class ReportTemplate {
 	public Map<String, String[]> getReportOptions() {
 		return reportOptions;
 	}
-	public String[] getReportOption(String key) {
-		return reportOptions.get(key);
+	public String getReportOption(String key) {
+		try {
+			return reportOptions.get(key)[0];
+		}catch(Exception e) {
+			return "notFound";
+		}
 	}
 	public String isoDateTimeNow() {
 		TimeZone tz = TimeZone.getTimeZone("UTC");
