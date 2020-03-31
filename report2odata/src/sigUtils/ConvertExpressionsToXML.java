@@ -10,7 +10,6 @@ import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.SequenceType;
 import net.sf.saxon.s9api.XdmAtomicValue;
 import net.sf.saxon.s9api.XdmValue;
-
 import uk.gov.nationalarchives.droid.core.signature.compiler.ByteSequenceAnchor;
 import uk.gov.nationalarchives.droid.core.signature.compiler.ByteSequenceCompiler;
 import uk.gov.nationalarchives.droid.core.signature.compiler.ByteSequenceSerializer;
@@ -33,6 +32,7 @@ public class ConvertExpressionsToXML implements ExtensionFunction {
     	return new SequenceType[] {
     			  SequenceType.makeSequenceType(ItemType.STRING, OccurrenceIndicator.ONE),
     			  SequenceType.makeSequenceType(ItemType.STRING, OccurrenceIndicator.ZERO_OR_ONE),
+    			  SequenceType.makeSequenceType(ItemType.STRING, OccurrenceIndicator.ZERO_OR_ONE),
     			  SequenceType.makeSequenceType(ItemType.STRING, OccurrenceIndicator.ZERO_OR_ONE)
     	};
     }
@@ -54,9 +54,16 @@ public class ConvertExpressionsToXML implements ExtensionFunction {
         String expression = arguments[0].toString();
         String sCompileType = arguments[1].toString();
         String sSigType = arguments[2].toString();
+        String sOffset = arguments[3].toString();
     	ByteSequenceCompiler.CompileType compileType = sCompileType.toUpperCase().equals("P") ? ByteSequenceCompiler.CompileType.PRONOM : ByteSequenceCompiler.CompileType.DROID;
         SignatureType sigType = sSigType.toUpperCase().equals("B") ? SignatureType.BINARY :  SignatureType.CONTAINER  ;     
         ByteSequenceAnchor offset =  ByteSequenceAnchor.BOFOffset;
+        switch(sOffset ) {
+	        case "pronom.ByteSequencePosition~AbsoluteEOF": offset=  ByteSequenceAnchor.EOFOffset; break;
+	        case "pronom.ByteSequencePosition~AbsoluteBOF": offset=  ByteSequenceAnchor.BOFOffset; break;
+	        case "pronom.ByteSequencePosition~Variable": offset=  ByteSequenceAnchor.VariableOffset; break;
+	        default:
+         }
     	String xml;
     	try {
     		xml = ByteSequenceSerializer.SERIALIZER.toXML(expression, offset, compileType, sigType);
