@@ -69,7 +69,7 @@
 		<javax.version>3.1.0</javax.version>
 		<velocity.version>2.0</velocity.version>
 		<Saxon-HE.version>9.9.1-6</Saxon-HE.version>
-		<httpclient.version>4.5.9</httpclient.version>
+		<httpclient.version>4.5.13</httpclient.version>
 		<droid-core.version>6.5-SNAPSHOT</droid-core.version>
 	</properties>
 </project>
